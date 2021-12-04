@@ -1,0 +1,101 @@
+:root {
+    --bg-primary: #242325;
+    --bg-secondary: #b3b3b3;
+    --bg-card: #dc965a;
+    --color-primary: white;
+    --color-secondary: #c8c8c8;
+    --bg-alternative: #b8336a;
+    --bg-complementary: #2b59c3;
+}
+
+html,
+body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-primary);
+}
+
+body {
+    color: var(--color-primary);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue',
+        sans-serif;
+}
+
+a {
+    color: rgb(0, 100, 200);
+    text-decoration: none;
+    outline: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color: rgb(0, 80, 160);
+}
+
+label {
+    display: block;
+}
+
+input,
+button,
+select,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    -webkit-padding: 0.4em 0;
+    padding: 0.4em;
+    margin: 0 0 0.5em 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
+
+input:disabled {
+    color: #ccc;
+}
+
+button {
+    color: #333;
+    background-color: #f4f4f4;
+    outline: none;
+}
+
+button:disabled {
+    color: #999;
+}
+
+button:not(:disabled):active {
+    background-color: #ddd;
+}
+
+button:focus {
+    border-color: #666;
+}
+
+*::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: var(--bg-primary);
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    background-color: var(--bg-primary);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #f5f5f5;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+}
