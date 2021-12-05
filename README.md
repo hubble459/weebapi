@@ -13,33 +13,51 @@ These scrapers are very easy to add and will all be open source.
 
 Accompanying this API are frontends for windows, linux, osx, android and ios. 
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
 ## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual vide~os). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
+## Requirements
+Latest NodeJS version with NPM or Yarn.
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```properties
+cd backend
+yarn install
+# or
+npm install
+```
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+In the following examples yarn can be replaced with npm.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Start the built api
+```properties
+cd backend
+yarn run build
+yarn start
+```
+
+### Development
+```properties
+yarn run dev
+```
+
+## API Documentation
+Swagger IO
 
 ## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Will be adding a lot more plugins to support as many websites as possible.
+As of right now, all plugins rely on the content being inside of the HTML received when a GET request is done to the page, but some manga hosting websites have it setup so that you need to have their scripts load the page after you've GET-requested the page.
 
+They do this to combat any scrapers like this.
+This can be easily bypassed by using a headless browser such as Puppeteer.
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Plugins can be contributed, but have to have their own jest tests and of course they should pass. These tests are a necessity because manga sites keep changing their DOM content so the plugins will stop working at some point. The tests can quickly show which plugins don't work and which do.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+```properties
+yarn jest --rootDir ./specs [spec filename]
+# or
+npx jest --rootDir ./specs [spec filename]
+```
 
 ## License
 ```
@@ -59,5 +77,4 @@ limitations under the License.
 ```
 
 ## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
-
+This is just a side project of mine so there's not much activity other than the occasional weekend that I'm working on it.
