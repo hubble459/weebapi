@@ -25,7 +25,16 @@ router.get('/', async (req, res) => {
             }
         }
     } else {
-        res.status(400).json({ message: 'Missing URL in query' });
+        const offset: number = +(req.query.offset || 0);
+        const limit: number = +(req.query.limit || 100);
+        const manga = await database.manga.all(limit, offset);
+        const total = await database.manga.count();
+        res.json({
+            manga,
+            offset,
+            limit,
+            total,
+        });
     }
 });
 
@@ -53,11 +62,13 @@ router.get('/images', async (req, res) => {
     }
 });
 
+/**
+ * Replace an existing manga with another url
+ */
 router.patch('/:manga_id', async (req, res) => {
     const id = req.params.manga_id;
     if (/^\d+$/.test(id)) {
-        const manga_id = +id;
-        let manga = await database.manga.get(manga_id);
+        let manga = await database.manga.get(+id);
         if (manga) {
             const url = req.body.url;
             if (typeof url !== 'string') {
@@ -75,7 +86,8 @@ router.patch('/:manga_id', async (req, res) => {
                         dbManga = await database.manga.update(scraped, manga.id);
                         res.json(dbManga);
                     } catch (e: any) {
-                        res.status(400).json({ message: e.message });
+                        const statusCode = +(<string>e.message || '').split(/Status: /)[1] || 400;
+                        res.status(statusCode).json({ message: e.message });
                     }
                 }
             }

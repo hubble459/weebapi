@@ -12,7 +12,7 @@
         "clean": "rimraf dist/*",
         "test": "npm run build:clean && jest",
         "format": "prettier -w src",
-        "dev:nodemon": "nodemon --watch src/ --exec \"npm run build:clean:start\" --verbose -e ts",
+        "dev:nodemon": "nodemon --watch src/ --exec \"npm run build:start\" --verbose -e ts",
         "dev": "ts-node-dev src/server.ts"
     },
     "keywords": [],
@@ -34,6 +34,7 @@
         "node-fetch": "^2.6.5"
     },
     "devDependencies": {
+        "@types/node": "^16.11.11",
         "@types/bcryptjs": "^2.4.2",
         "@types/better-sqlite3": "^7.4.0",
         "@types/cors": "^2.8.12",

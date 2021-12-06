@@ -16,7 +16,8 @@ class Madara extends DOMMangaScraper {
         'mangahz.com',
         'reaperscans.com',
         'mangarockteam.com',
-        'manhuaplus.com'
+        'manhuaplus.com',
+        '1stkissmanga.io',
     ];
 
     hostnames: string[] = [

@@ -4,8 +4,17 @@ import User from '../../models/user';
 
 const router = express.Router();
 
-router.get('/', async (_req, res) => {
-    res.json(await database.users.all());
+router.get('/', async (req, res) => {
+    const offset: number = +(req.query.offset || 0);
+    const limit: number = +(req.query.limit || 100);
+    const users = await database.users.all(limit, offset);
+    const total = await database.users.count();
+    res.json({
+        users,
+        offset,
+        limit,
+        total,
+    });
 });
 
 /**
@@ -21,7 +30,13 @@ router.post('/', async (req, res) => {
             } else if (password.length < 8) {
                 res.status(400).json({ message: 'Password should be longer than 7 characters' });
             } else if (!/\W/g.test(password) || !/\d/g.test(password)) {
-                res.status(400).json({ message: 'Password should contain at least one special character and a number' });
+                res.status(400).json({
+                    message: 'Password should contain at least one special character and a number',
+                });
+            } else if (!!await database.users.find(username)) {
+                res.status(409).json({
+                    message: 'This username is already taken'
+                });
             } else {
                 res.status(201).json(await database.users.add(username, password));
             }
@@ -36,14 +51,14 @@ router.post('/', async (req, res) => {
 /**
  * Login
  */
-router.put('/', async (req, res) => {    
+router.post('/login', async (req, res) => {
     const username = req.body?.username;
     const password = req.body?.password;
     if (!!password && typeof password === 'string' && !!username && typeof username === 'string') {
-        try {            
+        try {
             const token = await database.users.login(username, password);
             res.status(201).json({ token });
-        } catch (e: any) {            
+        } catch (e: any) {
             res.status(401).json({ message: e.message });
         }
     } else {
@@ -55,7 +70,7 @@ const auth: RequestHandler = async (req, res, next) => {
     const bearerToken = req.header('Authorization');
     if (!!bearerToken) {
         let token: string | undefined;
-        if (!!(token = (bearerToken.match(/Bearer (?<token>.*)/)?.groups?.token))) {
+        if (!!(token = bearerToken.match(/Bearer (?<token>.*)/)?.groups?.token)) {
             try {
                 const userPayload = database.users.verify(token) as User;
                 if (typeof userPayload === 'object') {
@@ -81,8 +96,7 @@ router.get('/me', auth, async (req, res) => {
     res.json(user);
 });
 
-
-router.get('/me/reading', auth, async (req, res) => {    
+router.get('/me/reading', auth, async (req, res) => {
     const user_id = req.body.user.id;
     const user = (await database.users.get(user_id))!;
     res.json(user.reading);
@@ -98,7 +112,6 @@ router.delete('/me/reading/:manga_id', auth, async (req, res) => {
         res.status(400).json({ message: 'Missing manga_id in body' });
     }
 });
-
 
 router.patch('/me/reading/:manga_id', auth, async (req, res) => {
     const manga_id = +req.params.manga_id;

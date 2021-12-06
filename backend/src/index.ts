@@ -9,7 +9,8 @@ export class Scrapers implements MangaScraper {
     readonly plugins: MangaScraper[] = [];
 
     constructor() {
-        const files = glob.sync('**/*.js', { cwd: path.join(__dirname, 'plugins'), absolute: true });
+        const devMode = !!process.env.TS_NODE_DEV;
+        const files = glob.sync(`**/*.${devMode ? 't' : 'j'}s`, { cwd: path.join(__dirname, 'plugins'), absolute: true });
 
         for (const filepath of files) {
             let plugin = require(filepath);

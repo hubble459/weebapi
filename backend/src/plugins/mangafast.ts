@@ -62,7 +62,7 @@ class Mangafast extends DOMMangaScraper {
     }
 
     override async search(query: string) {
-        const res = await this.api.post({
+        const res = await this.api._post({
             q: query,
             limit: 30,
         });

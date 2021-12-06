@@ -15,17 +15,6 @@ export type Headers = {
     [key: string]: string;
 };
 
-type RP = {
-    (...parts: string[]): R;
-    [path: string]: R;
-};
-
-type RM = {
-    _get(): string;
-};
-
-type R = RM & RP;
-
 export type RestPath = {
     (...parts: string[]): Rest;
     [path: string]: Rest;
@@ -39,11 +28,11 @@ export type RestMethods = {
     _header(key: string, value: string): RestMethods;
     _headers(headers: Headers): RestMethods;
     _save: Rest;
-    get(): Promise<any>;
-    post(data?: Data): Promise<any>;
-    put(data?: Data): Promise<any>;
-    patch(data?: Data): Promise<any>;
-    delete(): Promise<any>;
+    _get(): Promise<any>;
+    _post(data?: Data): Promise<any>;
+    _put(data?: Data): Promise<any>;
+    _patch(data?: Data): Promise<any>;
+    _delete(): Promise<any>;
 };
 
 export type Rest = RestMethods & RestPath;
@@ -93,6 +82,7 @@ export const defaultOptions: Readonly<RestOptions> = {
         if (data) {
             init.body = JSON.stringify(data);
         }
+        
         const res = await fetch(url, init);
         let response;
         if (res.headers.get('Content-Type')?.includes('application/json')) {
@@ -120,7 +110,7 @@ export function rest(endpoint: string, options?: Partial<RestOptions>) {
     }
     const opts: RestOptions = deepmerge(defaultOptions, options || {});
     if (!opts.json || !opts.requestHandler) {
-        throw new Error('Missing nessecary options');
+        throw new Error('Missing necessary options');
     }
     const orgHeaders = deepmerge({}, opts.headers);
     const route = [endpoint];
@@ -180,7 +170,7 @@ export function rest(endpoint: string, options?: Partial<RestOptions>) {
                 }) as Rest['_queries'];
             } else if (reflectors.includes(key)) {
                 return () => joined();
-            } else if (methods.includes(key as Method)) {
+            } else if (methods.includes(key.slice(1) as Method)) {
                 const url = joined();
                 if (!save) {
                     route.length = 0;
@@ -189,7 +179,7 @@ export function rest(endpoint: string, options?: Partial<RestOptions>) {
                 } else {
                     save = false;
                 }
-                return (data?: Data) => opts.requestHandler(key as Method, url, opts, data);
+                return (data?: Data) => opts.requestHandler((<string>key).slice(1) as Method, url, opts, data);
             } else {
                 route.push(opts.encode ? encodeURIComponent(key) : key);
                 return new Proxy<Rest>(noop as any, handler);

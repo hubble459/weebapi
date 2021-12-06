@@ -74,12 +74,11 @@ export default abstract class DOMMangaScraper implements MangaScraper {
         return false;
     }
 
-    constructor(queries: DOMMangaScraperQueries) {
-        // this.queries = queries;
-    }
-
     async getPage(url: URL) {
-        const window = await JSDOM.fromURL(url.href, {userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36'}).then((jsdom) => jsdom.window);
+        const window = await JSDOM.fromURL(url.href, {
+            userAgent:
+                'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36',
+        }).then((jsdom) => jsdom.window);
         const $ = jQuery(window);
         // @ts-ignore
         $.expr[':'].icontains = (obj: any, _index: number, meta: any[]) => {

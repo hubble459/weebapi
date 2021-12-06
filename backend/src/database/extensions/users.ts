@@ -15,11 +15,11 @@ class UsersDB extends DBExtension<User> {
     private readonly privateJWTKey: jwt.Secret = 'mqPmLVUt@R%7u{E4';
     readonly table_name = 'users';
     override readonly priority = 0;
-    readonly create_statement = 'CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(13) UNIQUE NOT NULL, password_hash TEXT NOT NULL)';
+    readonly create_statement =
+        'CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(13) UNIQUE NOT NULL, password_hash TEXT NOT NULL)';
 
     async all(limit: number = 30, offset: number = 0) {
         const users = await database.all<DBUser>('SELECT * FROM users LIMIT ? OFFSET ?', [limit, offset]);
-
         return users.map((dbUser) => ({
             username: dbUser.username,
             id: dbUser.id,
@@ -34,10 +34,14 @@ class UsersDB extends DBExtension<User> {
                 return {
                     id: dbUser.id,
                     username: dbUser.username,
-                    reading
+                    reading,
                 };
             }
         }
+    }
+
+    async find(username: string) {
+        return database.get<DBUser>('SELECT * FROM users WHERE username = ?', [username]);
     }
 
     async login(username: string, password: string) {
@@ -45,13 +49,17 @@ class UsersDB extends DBExtension<User> {
         if (!!user) {
             const passChecked = bcrypt.compareSync(password, user.password_hash);
             if (passChecked) {
-                return jwt.sign({
-                    id: user.id,
-                    username: user.username,
-                }, this.privateJWTKey, { expiresIn: '7d' })
+                return jwt.sign(
+                    {
+                        id: user.id,
+                        username: user.username,
+                    },
+                    this.privateJWTKey,
+                    { expiresIn: '7d' }
+                );
             }
         }
-        throw new Error('User or password incorrect');
+        throw new Error("Username and password don't match");
     }
 
     verify(token: string) {
@@ -60,18 +68,16 @@ class UsersDB extends DBExtension<User> {
 
     async update(user: User, password: string) {
         const password_hash = bcrypt.hashSync(password);
-        await database.run(
-            'UPDATE users SET password_hash = ? WHERE id = ?', [password_hash, user.id]
-        );
+        await database.run('UPDATE users SET password_hash = ? WHERE id = ?', [password_hash, user.id]);
         return user;
     }
 
     async add(username: string, password: string): Promise<User> {
         const password_hash = bcrypt.hashSync(password);
-        const res = await database.run(
-            'INSERT INTO users (username, password_hash) VALUES (?, ?)',
-            [username, password_hash]
-        );
+        const res = await database.run('INSERT INTO users (username, password_hash) VALUES (?, ?)', [
+            username,
+            password_hash,
+        ]);
         return {
             id: res.insertId,
             username,
