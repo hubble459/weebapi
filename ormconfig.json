@@ -1,0 +1,11 @@
+{
+    "type": "mysql",
+    "host": "143.178.215.190",
+    "port": 3306,
+    "username": "quentin",
+    "password": "@#4&!YwMM8hZ7kys",
+    "database": "manga",
+    "entities": ["src/database/entity/*.ts"],
+    "logging": true,
+    "synchronize": true
+  }

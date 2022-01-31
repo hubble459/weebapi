@@ -1,83 +1,93 @@
 {
   "main": {
-    "id": "80c8356af4235385",
+    "id": "d296f2fe11e97549",
     "type": "split",
     "children": [
       {
-        "id": "015613bfd7f1bc4e",
+        "id": "2cd0f3ed6853f8a8",
         "type": "leaf",
         "state": {
-          "type": "graph",
-          "state": {}
+          "type": "markdown",
+          "state": {
+            "file": "README.md",
+            "mode": "source"
+          }
         }
       }
     ],
     "direction": "vertical"
   },
   "left": {
-    "id": "fda5e89e08fbc2d4",
-    "type": "mobile-drawer",
+    "id": "aae69067dd1352a3",
+    "type": "split",
     "children": [
       {
-        "id": "062ee6185f5faaf9",
-        "type": "leaf",
-        "state": {
-          "type": "file-explorer",
-          "state": {}
-        }
-      },
-      {
-        "id": "63065fe8807ac827",
-        "type": "leaf",
-        "state": {
-          "type": "search",
-          "state": {
-            "query": "",
-            "matchingCase": false,
-            "explainSearch": false,
-            "collapseAll": false,
-            "extraContext": false,
-            "sortOrder": "alphabetical"
+        "id": "8aaa13dc055a87aa",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f1e76af5c18c0b49",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "3de7d9b179eae853",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
           }
-        }
+        ]
       }
     ],
-    "currentTab": 0
+    "direction": "horizontal",
+    "width": 300
   },
   "right": {
-    "id": "856ac329f8e19496",
-    "type": "mobile-drawer",
+    "id": "fd0faef521b0d69b",
+    "type": "split",
     "children": [
       {
-        "id": "7b6b27b6f8876a5c",
-        "type": "leaf",
-        "state": {
-          "type": "backlink",
-          "state": {
-            "collapseAll": false,
-            "extraContext": false,
-            "sortOrder": "alphabetical",
-            "showSearch": false,
-            "searchQuery": "",
-            "backlinkCollapsed": true,
-            "unlinkedCollapsed": true
+        "id": "8fb8603a679e85cd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "88a6b3db614c28a4",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "README.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
           }
-        }
+        ]
       }
     ],
-    "currentTab": 0
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
   },
-  "active": "015613bfd7f1bc4e",
+  "active": "2cd0f3ed6853f8a8",
   "lastOpenFiles": [
-    "database/tables/reading.md",
-    "tables.md",
-    "api/manga/puppeteer.md",
-    "database/tables/users.md",
-    "database/tables/chapters.md",
-    "database/queries.md",
-    "api/swagger/config.md",
-    "api/users.md",
-    "api/manga/plugins.md",
-    "database/tables/manga.md"
+    "README.md"
   ]
 }
