@@ -1,5 +1,5 @@
 import express from 'express';
-import { getRepository } from 'typeorm';
+import { getRepository, getManager } from 'typeorm';
 import { scrapers } from '../../..';
 import { Chapter } from '../../../database/entity/chapter';
 import { Manga } from '../../../database/entity/manga';
@@ -89,8 +89,20 @@ router.get('/:manga_id', async (req, res) => {
         const noRefresh = req.query.norefresh === 'true';
         const alternatives = req.query.alternatives === 'true';
         const manga_id = +id;
-        let manga = await getRepository(Manga).findOne(manga_id, {});
+        let manga = await getRepository(Manga).findOne(manga_id); 
+        // const raw = await getRepository(Manga)
+        //     .createQueryBuilder()
+        //     .addSelect('COUNT(chapter.url)', 'chapter_count')
+        //     .leftJoin(Chapter, 'chapter', 'chapter.mangaId = Manga.id')
+        //     .groupBy('chapter.mangaId')
+        //     .where({id: manga_id})
+        //     .getRawAndEntities();
+        // let manga = raw.entities[0];
+
+
         if (manga) {
+            // manga.chapter_count = +raw.raw[0].chapter_count;
+
             if (alternatives) {
                 const alternatives = await scrapers.search(manga.title, scrapers.randomHostnames(5, [manga.hostname]));
 
@@ -102,6 +114,8 @@ router.get('/:manga_id', async (req, res) => {
                 });
             } else {
                 if (!noRefresh && needsRefresh(manga)) {
+                    console.log('refreshing');
+
                     try {
                         manga = await refreshManga(manga);
                     } catch (e: any) {

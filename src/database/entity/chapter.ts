@@ -3,7 +3,7 @@ import { Manga } from './manga';
 
 @Entity()
 export class Chapter {
-    @Column()
+    @Column({ primary: true })
     url!: string;
 
     @Column()
@@ -12,10 +12,10 @@ export class Chapter {
     @Column()
     title!: string;
 
-    @Column({ primary: true })
+    @Column()
     number!: number;
 
-    @Column({ nullable: true })
+    @Column()
     posted?: Date;
 
     @ManyToOne(() => Manga, (manga: Manga) => manga.chapters, { eager: false, primary: true })

@@ -4,6 +4,7 @@ import { Reading } from '../../../database/entity/reading';
 import { User } from '../../../database/entity/user';
 import { login, needsRefresh, refreshManga, register, sign, verify } from '../util';
 import randtoken from 'rand-token';
+import { Chapter } from '../../../database/entity/chapter';
 
 const router = express.Router();
 
@@ -134,6 +135,7 @@ router.get('/me/reading', auth, async (req, res) => {
     const reading = (await getRepository(Reading).find({
         where: { user: { id: user_id } },
     }))!;
+
     res.json(reading);
 });
 
@@ -141,10 +143,7 @@ router.get('/me/reading/:manga_id', auth, async (req, res) => {
     const manga_id = +req.params.manga_id;
     if (!isNaN(manga_id)) {
         const user_id = req.body.user.id;
-        const reading = await getRepository(Reading).findOne({
-            loadEagerRelations: true,
-            where: { manga: { id: manga_id }, user: { id: user_id } },
-        });
+        const reading = await getRepository(Reading).findOne({ user: { id: user_id }, manga: {id: manga_id} });
         if (!!reading) {
             if (needsRefresh(reading.manga)) {
                 reading.manga = await refreshManga(reading.manga);
@@ -175,11 +174,12 @@ router.patch('/me/reading/:manga_id', auth, async (req, res) => {
     if (!isNaN(manga_id) && !isNaN(progress)) {
         const user_id = req.body.user.id;
         try {
-            const manga = await getRepository(Reading).save({
-                user: { id: user_id },
-                manga: { id: manga_id },
-                progress,
-            });
+            const manga = await getRepository(Reading).update(
+                { user: { id: user_id }, manga: { id: manga_id } },
+                {
+                    progress,
+                }
+            );
             res.json(manga);
         } catch (e) {
             res.status(400).json({ message: `manga with id '${manga_id}' not in reading list` });

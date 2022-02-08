@@ -7,6 +7,7 @@ import {
     JoinColumn,
     AfterLoad,
     getRepository,
+    BeforeInsert,
 } from 'typeorm';
 import { Chapter } from './chapter';
 
@@ -42,7 +43,7 @@ export class Manga {
     @Column({ type: 'simple-array' })
     genres!: string[];
 
-    @OneToMany(() => Chapter, (chapter: Chapter) => chapter.manga, { eager: false, cascade: true, onDelete: 'CASCADE' })
+    @OneToMany(() => Chapter, (chapter: Chapter) => chapter.manga, { eager: false, cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     @JoinColumn()
     chapters!: Chapter[];
 
@@ -53,6 +54,11 @@ export class Manga {
     refreshed!: Date;
 
     chapter_count!: number;
+
+    @BeforeInsert()
+    setRefreshed() {
+        this.refreshed = new Date();
+    }
 
     @AfterLoad()
     async countChapters() {

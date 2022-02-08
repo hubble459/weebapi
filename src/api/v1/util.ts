@@ -4,10 +4,11 @@ import { User } from '../../database/entity/user';
 import bcrypt from 'bcryptjs';
 import { Manga } from '../../database/entity/manga';
 import { scrapers } from '../..';
+import { Chapter } from '../../database/entity/chapter';
 
 const PRIVATE_JWT_KEY = 'mqPmLVUt@R%7u{E4';
-// const REFRESH_RATE = 15 * 60 * 1000; // 15 minutes in ms
-const REFRESH_RATE = 15 * 1000; // 15 seconds in ms
+const REFRESH_RATE = 15 * 60 * 1000; // 15 minutes in ms
+// const REFRESH_RATE = 15 * 1000; // 15 seconds in ms
 
 export function verify(token: string) {
     return jwt.verify(token, PRIVATE_JWT_KEY);
@@ -41,14 +42,19 @@ export async function register(username: string, password: string) {
 }
 
 export function needsRefresh(manga: Manga) {
-    return manga.refreshed.getTime() + REFRESH_RATE < Date.now();
+    console.log(manga.refreshed.valueOf());
+
+    return manga.refreshed.valueOf() + REFRESH_RATE < Date.now();
 }
 
 export async function refreshManga(manga: Manga) {
     const scraped = (await scrapers.scrape(new URL(manga.url))) as Manga;
+    scraped.refreshed = new Date();
+    // const chapters = scraped.chapters;
     scraped.id = manga.id;
-    await getRepository(Manga).save(scraped);
     scraped.chapter_count = scraped.chapters.length;
+    await getRepository(Manga).save(scraped);
     delete (<any>scraped).chapters;
+
     return scraped;
 }

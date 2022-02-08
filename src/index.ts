@@ -36,7 +36,10 @@ export class Scrapers implements MangaScraper {
         if (!plugin) {
             throw new Error('No scraper for this url');
         } else {
-            return plugin.scrape(url);
+            const manga = await plugin.scrape(url);
+            let seen: any = {};
+            manga.chapters = manga.chapters.filter(c => seen.hasOwnProperty(c.url) ? false : (seen[c.url] = true));
+            return manga;
         }
     }
 

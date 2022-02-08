@@ -12,7 +12,7 @@ export class User {
     @Column()
     password_hash!: string;
 
-    @OneToMany(() => Reading, (reading: Reading) => reading.user)
+    @OneToMany(() => Reading, (reading: Reading) => reading.user, {cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     @JoinColumn()
     reading!: Reading[];
 }

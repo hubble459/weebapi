@@ -1,23 +1,41 @@
-import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn, JoinColumn, CreateDateColumn, OneToOne } from 'typeorm';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+    JoinColumn,
+    CreateDateColumn,
+    OneToOne,
+    PrimaryColumn,
+    Index,
+    Unique,
+    ManyToOne,
+} from 'typeorm';
 import { Manga } from './manga';
 import { User } from './user';
 
 @Entity()
+@Unique('sid', ['user.id', 'manga.id'])
 export class Reading {
+    @PrimaryGeneratedColumn()
+    id!: number;
+
     @Column()
     progress!: number;
 
-    @OneToOne(() => Manga, {cascade: true, onDelete: 'CASCADE', eager: true, primary: true})
+    @ManyToOne(() => Manga, { cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE', eager: true })
     @JoinColumn()
     manga!: Manga;
 
-    @OneToOne(() => User, (user: User) => user.reading, {cascade: true, onDelete: 'CASCADE', eager: false, primary: true})
+    @ManyToOne(() => User, {
+        eager: false,
+    })
     @JoinColumn()
     user!: User;
 
-    @UpdateDateColumn({type: 'timestamp'})
+    @UpdateDateColumn({ type: 'timestamp' })
     updated!: Date;
 
-    @CreateDateColumn({type: 'timestamp'})
+    @CreateDateColumn({ type: 'timestamp' })
     created!: Date;
 }
