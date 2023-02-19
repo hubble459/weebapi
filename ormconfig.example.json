@@ -1,0 +1,11 @@
+{
+    "type": "mysql",
+    "host": "ip",
+    "port": 3306,
+    "username": "weeaboo",
+    "password": "password",
+    "database": "manga",
+    "entities": ["src/database/entity/*.ts"],
+    "logging": true,
+    "synchronize": true
+  }
